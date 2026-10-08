@@ -34,6 +34,9 @@ export const PeoplePage = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
+  const hasPeople = people.length > 0;
+  const isLoaded = !isLoading && !isError;
+
   return (
     <>
       <h1 className="title">People Page</h1>
@@ -41,7 +44,7 @@ export const PeoplePage = () => {
       <div className="block">
         <div className="columns is-desktop is-flex-direction-row-reverse">
           <div className="column is-7-tablet is-narrow-desktop">
-            {!isLoading && !isError && people.length > 0 && <PeopleFilters />}
+            {isLoaded && hasPeople && <PeopleFilters />}
           </div>
 
           <div className="column">
@@ -52,17 +55,19 @@ export const PeoplePage = () => {
                 <p data-cy="peopleLoadingError">Something went wrong</p>
               )}
 
-              {!isLoading && !isError && people.length === 0 && (
+              {isLoaded && !hasPeople && (
                 <p data-cy="noPeopleMessage">
                   There are no people on the server
                 </p>
               )}
 
-              {!isLoading && !isError && visiblePeople.length === 0 && (
-                <p>There are no people matching the current search criteria</p>
+              {isLoaded && hasPeople && visiblePeople.length === 0 && (
+                <p data-cy="noMatchingPeople">
+                  There are no people matching the current search criteria
+                </p>
               )}
 
-              {!isLoading && !isError && people.length > 0 && (
+              {isLoaded && visiblePeople.length > 0 && (
                 <PeopleTable people={people} visiblePeople={visiblePeople} />
               )}
             </div>
